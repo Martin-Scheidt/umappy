@@ -11,13 +11,13 @@ import umap
 ourData = pd.read_csv("C:/_dev/umappy/ourData.csv")
 ourData.head()
 
-ourData.dropna()
+ourData = ourData.dropna()
 # str(ourData)
 # ourData.Threshold_LP.value_counts()
 
 # print(ourData.Threshold_LP.value_counts())
 
-sns.pairplot(ourData.drop("Vh", axis=1), hue="DATE")
+sns.pairplot(ourData.drop("Vh", axis=1), hue='Rin')
 
 reducer = umap.UMAP()
 

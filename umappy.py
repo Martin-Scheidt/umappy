@@ -7,37 +7,104 @@ import seaborn as sns
 import pandas as pd
 import umap
 # %matplotlib inline
+sns.set_theme(style='dark', context='notebook', rc={'figure.figsize':(14,10)})
 
-ourData = pd.read_csv("C:/_dev/umappy/ourData.csv")
-ourData.head()
+test = pd.read_csv("./Martin2.csv", sep=";", decimal=",", usecols=['maxdV', 'type'])[['type', 'maxdV']]
+test.head()
+print(test)
 
-ourData = ourData.dropna()
-# str(ourData)
-# ourData.Threshold_LP.value_counts()
+test = test.dropna()
+# test = test.drop('type')
+test.type.value_counts()
 
-# print(ourData.Threshold_LP.value_counts())
-
-sns.pairplot(ourData.drop("Vh", axis=1), hue='Rin')
+sns.pairplot(test, hue='type')
+# sns.clustermap(test, hue='type')
 
 reducer = umap.UMAP()
 
-
-ourData_data = ourData[
+test_data = test[
     [
-        "Threshold_LP",
-        "AP_peak",
-        "rise"
+        "maxdV",
+        # "type",
+        # "rheobase",
+        # # "Name",
+        # "Vh",
+        # # "Rin",
+        # "Tau",
+        # "Cm",
+        # "Rin",
+        # "Thres",
+        # # "Threshold_LP",
+        # "Thres_Time",
+        # "AP_duration",
+        # # "Rise",
+        # "ADP",
+        # "ADP_area",
+        # # "FAHP",
+        # # "FAHP_time",
+
     ]
 ].values
-scaled_ourData_data =StandardScaler().fit_transform(ourData)
-scaled_ourData_data.shape
+scaled_test_data = StandardScaler().fit_transform(test_data)
 
-embedding = reducer.fit_transform(scaled_ourData_data)
+print(scaled_test_data)
+
+embedding = reducer.fit_transform(scaled_test_data)
 embedding.shape
 
+print("###################################")
+print(embedding)
+
+print(test_data)
 plt.scatter(
     embedding[:, 0],
     embedding[:, 1],
-)
+    c=[sns.color_palette()[x] for x in test.type.map({"Hetero":1, "Wt":2})])
 plt.gca().set_aspect('equal', 'datalim')
-plt.title('UMAP projection of the ourData dataset', fontsize=24)
+plt.title('UMAP mit Chiaras Daten', fontsize=24);
+
+plt.show()
+
+
+
+
+
+
+
+
+
+# %matplotlib inline
+
+# ourData = pd.read_csv("C:/_dev/umappy/ourData.csv")
+# ourData.head()
+
+# ourData = ourData.dropna()
+# # str(ourData)
+# # ourData.Threshold_LP.value_counts()
+
+# # print(ourData.Threshold_LP.value_counts())
+
+# sns.pairplot(ourData.drop("Vh", axis=1), hue='Rin')
+
+# reducer = umap.UMAP()
+
+
+# ourData_data = ourData[
+#     [
+#         "Threshold_LP",
+#         "AP_peak",
+#         "rise"
+#     ]
+# ].values
+# scaled_ourData_data =StandardScaler().fit_transform(ourData)
+# scaled_ourData_data.shape
+
+# embedding = reducer.fit_transform(scaled_ourData_data)
+# embedding.shape
+
+# plt.scatter(
+#     embedding[:, 0],
+#     embedding[:, 1],
+# )
+# plt.gca().set_aspect('equal', 'datalim')
+# plt.title('UMAP projection of the ourData dataset', fontsize=24)
